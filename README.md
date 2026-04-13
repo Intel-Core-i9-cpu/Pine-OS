@@ -3,12 +3,20 @@
 
 App-first starter project for eventually branching into operating-system targets, including Raspberry Pi 5.
 
+## Quick start
+
+```bash
+
+
+App-first starter project for eventually branching into operating-system targets, including Raspberry Pi 5.
+
 App-first starter project for eventually branching into operating-system targets.
 
 
 ## Quick start
 
 ```bash
+
 
 python3 app/pine_app.py new pine-demo --target rpi5 --dir .
 python3 app/pine_app.py status --config ./pine-demo/pine.json
@@ -35,6 +43,17 @@ python3 app/pine_app.py rpi5-bootkit --config ./pine-demo/pine.json --out ./dist
 2. Ship release artifacts (`.deb`, `.exe`, and `rpi5 .img`) from releases.
 3. Use `rpi5-bootkit` to validate boot plumbing before full userspace.
 4. Replace image scaffold with a fully bootable Raspberry Pi 5 image in next milestones.
+
+
+## Release behavior
+
+When you publish a GitHub Release, the workflow uploads these files **directly onto that Release**:
+
+- `*.deb` (Linux package)
+- `*.img` (RPi5 image scaffold)
+- `*.exe` (Windows executable built on `windows-latest`)
+
+No manual upload step is required.
 
 python3 app/pine_app.py new pine-demo --target desktop --dir .
 python3 app/pine_app.py status --config ./pine-demo/pine.json

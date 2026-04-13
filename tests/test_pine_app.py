@@ -1,6 +1,10 @@
 
 import gzip
 
+
+import gzip
+
+
 import json
 import tempfile
 import unittest
@@ -16,7 +20,9 @@ from app.pine_app import (
     status,
 )
 
+
 from app.pine_app import create_project, package_hint, status
+
 
 
 
@@ -69,6 +75,7 @@ class PineAppTests(unittest.TestCase):
 
             raw = gzip.decompress((out / "boot" / "initramfs.cpio.gz").read_bytes())
             self.assertTrue(raw.startswith(b"070701"))
+
 
 
             self.assertIn(".exe", package_hint(config_path, "exe"))
