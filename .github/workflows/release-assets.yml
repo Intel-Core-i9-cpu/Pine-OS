@@ -1,0 +1,45 @@
+name: Release Assets
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-linux-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate project scaffold
+        run: python app/pine_app.py new pine-release --target rpi5 --dir .
+      - name: Build Linux release artifacts
+        run: |
+          python app/pine_app.py package --config ./pine-release/pine.json --format deb --out ./dist
+          python app/pine_app.py rpi5-image --config ./pine-release/pine.json --out ./dist
+          python app/pine_app.py rpi5-bootkit --config ./pine-release/pine.json --out ./dist
+          tar -czf dist/pine-release-rpi5-bootkit.tar.gz -C dist pine-release-0.1.0-rpi5-bootkit
+      - name: Upload linux artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.deb
+            dist/*.img
+            dist/*bootkit.tar.gz
+
+  build-windows-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+      - name: Build Windows executable
+        run: pyinstaller --onefile --name pine-app app/pine_app.py
+      - name: Upload windows artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/pine-app.exe
