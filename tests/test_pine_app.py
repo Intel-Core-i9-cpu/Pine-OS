@@ -1,8 +1,15 @@
+
 import gzip
+
+
+import gzip
+
+
 import json
 import tempfile
 import unittest
 from pathlib import Path
+
 
 from app.pine_app import (
     ProjectConfig,
@@ -12,6 +19,11 @@ from app.pine_app import (
     package_hint,
     status,
 )
+
+
+from app.pine_app import create_project, package_hint, status
+
+
 
 
 class PineAppTests(unittest.TestCase):
@@ -36,6 +48,7 @@ class PineAppTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             project_root = Path(td) / "pine-lite"
             config_path = create_project("pine-lite", "desktop", project_root)
+
             output_dir = Path(td) / "dist"
 
             deb_result = package_hint(config_path, "deb", output_dir)
@@ -62,6 +75,12 @@ class PineAppTests(unittest.TestCase):
 
             raw = gzip.decompress((out / "boot" / "initramfs.cpio.gz").read_bytes())
             self.assertTrue(raw.startswith(b"070701"))
+
+
+
+            self.assertIn(".exe", package_hint(config_path, "exe"))
+            self.assertIn(".deb", package_hint(config_path, "deb"))
+
 
 
 if __name__ == "__main__":

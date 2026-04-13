@@ -4,8 +4,10 @@ on:
   release:
     types: [published]
 
+
 permissions:
   contents: write
+
 
 jobs:
   build-linux-assets:
@@ -21,6 +23,7 @@ jobs:
         run: |
           python app/pine_app.py package --config ./pine-release/pine.json --format deb --out ./dist
           python app/pine_app.py rpi5-image --config ./pine-release/pine.json --out ./dist
+
       - name: Collect linux assets
         run: |
           mkdir -p release-assets
@@ -31,6 +34,17 @@ jobs:
         with:
           name: linux-release-assets
           path: release-assets/*
+
+          python app/pine_app.py rpi5-bootkit --config ./pine-release/pine.json --out ./dist
+          tar -czf dist/pine-release-rpi5-bootkit.tar.gz -C dist pine-release-0.1.0-rpi5-bootkit
+      - name: Upload linux artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.deb
+            dist/*.img
+            dist/*bootkit.tar.gz
+
 
   build-windows-exe:
     runs-on: windows-latest
@@ -43,6 +57,7 @@ jobs:
         run: pip install pyinstaller
       - name: Build Windows executable
         run: pyinstaller --onefile --name pine-app app/pine_app.py
+
       - name: Stage windows asset
         shell: bash
         run: |
@@ -70,3 +85,9 @@ jobs:
         run: |
           ls -lah release-assets
           gh release upload "$TAG" release-assets/*.deb release-assets/*.img release-assets/*.exe --clobber
+
+      - name: Upload windows artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/pine-app.exe
+
