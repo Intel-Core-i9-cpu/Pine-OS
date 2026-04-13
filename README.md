@@ -1,10 +1,15 @@
 # Pine-OS
 
+
 App-first starter project for eventually branching into operating-system targets, including Raspberry Pi 5.
+
+App-first starter project for eventually branching into operating-system targets.
+
 
 ## Quick start
 
 ```bash
+
 python3 app/pine_app.py new pine-demo --target rpi5 --dir .
 python3 app/pine_app.py status --config ./pine-demo/pine.json
 python3 app/pine_app.py package --config ./pine-demo/pine.json --format deb --out ./dist
@@ -30,3 +35,15 @@ python3 app/pine_app.py rpi5-bootkit --config ./pine-demo/pine.json --out ./dist
 2. Ship release artifacts (`.deb`, `.exe`, and `rpi5 .img`) from releases.
 3. Use `rpi5-bootkit` to validate boot plumbing before full userspace.
 4. Replace image scaffold with a fully bootable Raspberry Pi 5 image in next milestones.
+
+python3 app/pine_app.py new pine-demo --target desktop --dir .
+python3 app/pine_app.py status --config ./pine-demo/pine.json
+python3 app/pine_app.py package --config ./pine-demo/pine.json --format deb
+```
+
+## Current approach
+
+1. Build the user application first.
+2. Package as `.exe` or `.deb` for distribution.
+3. Branch into target-specific work (including `rpi5`) after app features stabilize.
+
