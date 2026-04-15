@@ -13,8 +13,10 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 
 
+
 import json
 from dataclasses import asdict, dataclass
+
 
 
 from pathlib import Path
@@ -276,6 +278,7 @@ def package_hint(config_path: Path, package_format: str, output_dir: Path) -> st
         return f"Created Debian package: {path}"
 
 
+
 def package_hint(config_path: Path, package_format: str) -> str:
     config = ProjectConfig.from_path(config_path)
 
@@ -290,6 +293,7 @@ def package_hint(config_path: Path, package_format: str) -> str:
             f"{config.name}: prepare a Debian package (.deb) for your app layer now.\n"
             "Tip: Add debian/control and build with dpkg-deb or debuild."
         )
+
 
 
 
@@ -323,9 +327,11 @@ def build_parser() -> argparse.ArgumentParser:
     bootkit_cmd.add_argument("--out", default="dist", help="Output directory")
 
 
+
     pack_cmd = sub.add_parser("package", help="Show packaging hints")
     pack_cmd.add_argument("--config", default="pine.json", help="Path to pine.json")
     pack_cmd.add_argument("--format", choices=("exe", "deb"), required=True)
+
 
 
 
@@ -363,7 +369,9 @@ def main() -> int:
         print(f"Created RPi5 bootkit scaffold: {root}")
 
 
+
         print(package_hint(Path(args.config), args.format))
+
 
 
         return 0

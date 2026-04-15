@@ -1,8 +1,11 @@
 
 import gzip
 
+import gzip
+
 
 import gzip
+
 
 
 import json
@@ -21,7 +24,9 @@ from app.pine_app import (
 )
 
 
+
 from app.pine_app import create_project, package_hint, status
+
 
 
 
@@ -78,10 +83,9 @@ class PineAppTests(unittest.TestCase):
 
 
 
+
             self.assertIn(".exe", package_hint(config_path, "exe"))
             self.assertIn(".deb", package_hint(config_path, "deb"))
-
-
 
 if __name__ == "__main__":
     unittest.main()
