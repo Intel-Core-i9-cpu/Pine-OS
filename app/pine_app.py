@@ -4,12 +4,21 @@
 from __future__ import annotations
 
 import argparse
+
 import gzip
 import io
 import json
 import tarfile
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+
+
+
+import json
+from dataclasses import asdict, dataclass
+
+
+
 from pathlib import Path
 
 
@@ -223,6 +232,7 @@ def create_rpi5_image_bundle(config: ProjectConfig, output_dir: Path) -> Path:
     return bundle
 
 
+
 def create_project(name: str, target: str, directory: Path) -> Path:
     if target not in SUPPORTED_TARGETS:
         raise ValueError(f"Unsupported target '{target}'.")
@@ -267,6 +277,26 @@ def package_hint(config_path: Path, package_format: str, output_dir: Path) -> st
         path = create_deb_package(config, output_dir)
         return f"Created Debian package: {path}"
 
+
+
+def package_hint(config_path: Path, package_format: str) -> str:
+    config = ProjectConfig.from_path(config_path)
+
+    if package_format == "exe":
+        return (
+            f"{config.name}: prepare a Windows installer (.exe) for your app layer now.\n"
+            "Tip: Use PyInstaller + Inno Setup for distribution."
+        )
+
+    if package_format == "deb":
+        return (
+            f"{config.name}: prepare a Debian package (.deb) for your app layer now.\n"
+            "Tip: Add debian/control and build with dpkg-deb or debuild."
+        )
+
+
+
+
     raise ValueError("Format must be 'exe' or 'deb'.")
 
 
@@ -282,6 +312,7 @@ def build_parser() -> argparse.ArgumentParser:
     status_cmd = sub.add_parser("status", help="Show project roadmap")
     status_cmd.add_argument("--config", default="pine.json", help="Path to pine.json")
 
+
     pack_cmd = sub.add_parser("package", help="Create release artifacts")
     pack_cmd.add_argument("--config", default="pine.json", help="Path to pine.json")
     pack_cmd.add_argument("--format", choices=("exe", "deb"), required=True)
@@ -294,6 +325,15 @@ def build_parser() -> argparse.ArgumentParser:
     bootkit_cmd = sub.add_parser("rpi5-bootkit", help="Create RPi5 boot milestone assets")
     bootkit_cmd.add_argument("--config", default="pine.json", help="Path to pine.json")
     bootkit_cmd.add_argument("--out", default="dist", help="Output directory")
+
+
+
+    pack_cmd = sub.add_parser("package", help="Show packaging hints")
+    pack_cmd.add_argument("--config", default="pine.json", help="Path to pine.json")
+    pack_cmd.add_argument("--format", choices=("exe", "deb"), required=True)
+
+
+
 
     return parser
 
@@ -313,6 +353,7 @@ def main() -> int:
         return 0
 
     if args.command == "package":
+
         print(package_hint(Path(args.config), args.format, Path(args.out)))
         return 0
 
@@ -326,6 +367,13 @@ def main() -> int:
         config = ProjectConfig.from_path(Path(args.config))
         root = create_rpi5_bootkit(config, Path(args.out))
         print(f"Created RPi5 bootkit scaffold: {root}")
+
+
+
+        print(package_hint(Path(args.config), args.format))
+
+
+
         return 0
 
     parser.print_help()
